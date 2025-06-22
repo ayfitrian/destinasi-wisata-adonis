@@ -1,0 +1,90 @@
+@component('components/layouts/app', { title: 'Kelola Destinasi' })
+  @slot('main')
+    <div class="card shadow-sm">
+      <div class="card-header">
+        <h2 class="h5 mb-0 d-flex align-items-center"><i class="bi bi-map-fill me-2"></i> Kelola Destinasi Wisata</h2>
+      </div>
+      <div class="card-body">
+        <button class="btn btn-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#formTambahWisata" aria-expanded="false" aria-controls="formTambahWisata">
+          <i class="bi bi-plus-lg"></i> Tambah Destinasi Baru
+        </button>
+        
+        <div class="collapse mb-4 border p-3 rounded" id="formTambahWisata">
+          <h4 class="mb-3">Form Destinasi</h4>
+          <form action="{{ route('wisata.manage.store') }}" method="POST">
+            {{ csrfField() }}
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="nama" class="form-label">Nama Destinasi</label>
+                <input type="text" name="nama" id="nama" class="form-control">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="biayaMasuk" class="form-label">Biaya Masuk (Rp)</label>
+                <input type="number" name="biayaMasuk" id="biayaMasuk" class="form-control">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="kotaId" class="form-label">Kota</label>
+                <select name="kotaId" id="kotaId" class="form-select">
+                  <option selected disabled>Pilih kota...</option>
+                  @each(kota in kotas)
+                    <option value="{{ kota.id }}">{{ kota.namaKota }}</option>
+                  @endeach
+                </select>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="kategoriId" class="form-label">Kategori</label>
+                <select name="kategoriId" id="kategoriId" class="form-select">
+                  <option selected disabled>Pilih kategori...</option>
+                  @each(kategori in kategoris)
+                    <option value="{{ kategori.id }}">{{ kategori.namaKategori }}</option>
+                  @endeach
+                </select>
+              </div>
+              <div class="col-12 mb-3">
+                <label for="deskripsi" class="form-label">Deskripsi</label>
+                <textarea name="deskripsi" id="deskripsi" rows="3" class="form-control"></textarea>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-success">Simpan</button>
+          </form>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>#</th>
+                <th>Nama</th>
+                <th>Kota</th>
+                <th>Kategori</th>
+                <th>Biaya Masuk</th>
+                <th class="text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              @each((wisata, index) in wisatas)
+                <tr>
+                  <td>{{ index + 1 }}</td>
+                  <td>{{ wisata.nama }}</td>
+                  <td>{{ wisata.kota.namaKota }}</td>
+                  <td>{{ wisata.kategori.namaKategori }}</td>
+                  <td>Rp {{ new Intl.NumberFormat('id-ID').format(wisata.biayaMasuk) }}</td>
+                  <td class="text-center">
+                    <a href="{{ route('wisata.detail', { id: wisata.id }) }}" class="btn btn-sm btn-info" title="Lihat Detail"><i class="bi bi-eye"></i></a>
+                    <a href="{{ route('wisata.manage.edit', { id: wisata.id }) }}" class="btn btn-sm btn-warning" title="Edit"><i class="bi bi-pencil"></i></a>
+                    <form action="{{ route('wisata.manage.destroy', { id: wisata.id }) }}?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin hapus?')">
+                        {{ csrfField() }}
+                        <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="bi bi-trash"></i></button>
+                    </form>
+                  </td>
+                </tr>
+              @else
+                <tr><td colspan="6" class="text-center p-4 text-muted">Belum ada data destinasi.</td></tr>
+              @endeach
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  @endslot
+@endcomponent

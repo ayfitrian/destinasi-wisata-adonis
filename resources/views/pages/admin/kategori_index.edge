@@ -1,0 +1,68 @@
+@component('components/layouts/app', { title: 'Kelola Kategori' })
+  @slot('main')
+    <div class="card shadow-sm">
+      <div class="card-header">
+        <h2 class="h5 mb-0 d-flex align-items-center"><i class="bi bi-tags-fill me-2"></i> Kelola Kategori</h2>
+      </div>
+      <div class="card-body">
+        <form action="{{ route('kategori.store') }}" method="POST" class="row g-3 align-items-center justify-content-center mb-4 pb-3 border-bottom">
+          {{ csrfField() }}
+          <div class="col-sm-6">
+            <label for="namaKategori" class="visually-hidden">Nama Kategori</label>
+            <input 
+              type="text" 
+              id="namaKategori"
+              name="namaKategori"
+              class="form-control {{ flashMessages.has('errors.namaKategori') ? 'is-invalid' : '' }}" 
+              placeholder="Masukkan nama kategori baru"
+              value="{{ flashMessages.get('old.namaKategori') || '' }}"
+            >
+            @if(flashMessages.has('errors.namaKategori'))
+              <div class="invalid-feedback">{{ flashMessages.get('errors.namaKategori') }}</div>
+            @endif
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-plus-lg"></i> Tambah
+            </button>
+          </div>
+        </form>
+        
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th scope="col" class="text-center" style="width: 5%;">#</th>
+                <th scope="col">Nama Kategori</th>
+                <th scope="col" class="text-center" style="width: 20%;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              @each((kategori, index) in kategoris)
+                <tr>
+                  <td class="text-center">{{ index + 1 }}</td>
+                  <td>{{ kategori.namaKategori }}</td>
+                  <td class="text-center">
+                    <a href="{{ route('kategori.edit', { id: kategori.id }) }}" class="btn btn-sm btn-warning">
+                      <i class="bi bi-pencil-square"></i> Edit
+                    </a>
+                    <form action="{{ route('kategori.destroy', { id: kategori.id }) }}?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Anda yakin ingin menghapus kategori ini?')">
+                        {{ csrfField() }}
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            <i class="bi bi-trash"></i> Hapus
+                        </button>
+                    </form>
+                  </td>
+                </tr>
+              @else
+                <tr>
+                  <td colspan="3" class="text-center text-muted p-4">Belum ada data kategori.</td>
+                </tr>
+              @endeach
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  @endslot
+@endcomponent

@@ -1,0 +1,60 @@
+@component('components/layouts/app', { title: 'Jelajahi Wisata' })
+  @slot('main')
+    <h2 class="display-6 fw-bold mb-4">🗺️ Jelajahi Semua Destinasi</h2>
+
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <form method="GET" action="{{ route('wisata.filter') }}">
+          <div class="row g-3 align-items-end">
+            <div class="col-md-5">
+              <label for="filterKota" class="form-label">Filter berdasarkan Kota:</label>
+              <select name="filterKota" id="filterKota" class="form-select">
+                <option value="">Semua Kota</option>
+                @each(kota in kotas)
+                  <option value="{{ kota.id }}" {{ kota.id == filterKota ? 'selected' : '' }}>{{ kota.namaKota }}</option>
+                @endeach
+              </select>
+            </div>
+            <div class="col-md-5">
+              <label for="filterBiaya" class="form-label">Biaya Masuk Maksimal:</label>
+              <input type="number" name="filterBiaya" id="filterBiaya" class="form-control" placeholder="Contoh: 50000" value="{{ filterBiaya || '' }}">
+            </div>
+            <div class="col-md-2 d-grid">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-search"></i> Terapkan
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      @each(wisata in wisatas)
+        <div class="col">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">{{ wisata.nama }}</h5>
+              <p class="card-text text-muted">{{ wisata.deskripsi.substring(0, 100) }}...</p>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">📍 {{ wisata.kota.namaKota }}</li>
+              <li class="list-group-item">📁 {{ wisata.kategori.namaKategori }}</li>
+              <li class="list-group-item">💰 Rp {{ new Intl.NumberFormat('id-ID').format(wisata.biayaMasuk) }}</li>
+            </ul>
+            <div class="card-body text-center">
+              <a href="{{ route('wisata.detail', { id: wisata.id }) }}" class="btn btn-outline-primary">Lihat Detail</a>
+            </div>
+          </div>
+        </div>
+      @else
+        <div class="col-12">
+          <div class="alert alert-warning text-center">
+            <h4 class="alert-heading">Tidak Ditemukan!</h4>
+            <p>Tidak ada destinasi wisata yang cocok dengan kriteria filter Anda.</p>
+          </div>
+        </div>
+      @endeach
+    </div>
+  @endslot
+@endcomponent

@@ -1,0 +1,33 @@
+@component('components/layouts/app', { title: 'Edit Kategori' })
+  @slot('main')
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h2 class="h5 mb-0"><i class="bi bi-pencil-square me-2"></i>Edit Kategori</h2>
+                </div>
+                <div class="card-body">
+                    <form action="{{ route('kategori.update', { id: kategori.id }) }}?_method=PUT" method="POST">
+                        {{ csrfField() }}
+                        <div class="mb-3">
+                            <label for="namaKategori" class="form-label">Nama Kategori</label>
+                            <input 
+                                type="text" 
+                                id="namaKategori"
+                                name="namaKategori"
+                                class="form-control {{ flashMessages.has('errors.namaKategori') ? 'is-invalid' : '' }}" 
+                                value="{{ flashMessages.get('old.namaKategori') || kategori.namaKategori }}"
+                            >
+                            @if(flashMessages.has('errors.namaKategori'))
+                                <div class="invalid-feedback">{{ flashMessages.get('errors.namaKategori') }}</div>
+                            @endif
+                        </div>
+                        <a href="{{ route('kategori.index') }}" class="btn btn-secondary">Batal</a>
+                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  @endslot
+@endcomponent

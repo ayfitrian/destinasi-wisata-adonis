@@ -1,0 +1,56 @@
+@component('components/layouts/app', { title: 'Edit Destinasi' })
+  @slot('main')
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow-sm">
+          <div class="card-header">
+            <h2 class="h5 mb-0"><i class="bi bi-pencil-square me-2"></i>Edit Destinasi Wisata</h2>
+          </div>
+          <div class="card-body">
+            <form action="{{ route('wisata.manage.update', { id: wisata.id }) }}?_method=PUT" method="POST">
+              {{ csrfField() }}
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="nama" class="form-label">Nama Destinasi</label>
+                  <input type="text" name="nama" id="nama" class="form-control" value="{{ wisata.nama }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="biayaMasuk" class="form-label">Biaya Masuk (Rp)</label>
+                  <input type="number" name="biayaMasuk" id="biayaMasuk" class="form-control" value="{{ wisata.biayaMasuk }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="kotaId" class="form-label">Kota</label>
+                  <select name="kotaId" id="kotaId" class="form-select">
+                    <option disabled>Pilih kota...</option>
+                    @each(kota in kotas)
+                      <option value="{{ kota.id }}" {{ wisata.kotaId === kota.id ? 'selected' : '' }}>
+                        {{ kota.namaKota }}
+                      </option>
+                    @endeach
+                  </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="kategoriId" class="form-label">Kategori</label>
+                  <select name="kategoriId" id="kategoriId" class="form-select">
+                    <option disabled>Pilih kategori...</option>
+                    @each(kategori in kategoris)
+                       <option value="{{ kategori.id }}" {{ wisata.kategoriId === kategori.id ? 'selected' : '' }}>
+                        {{ kategori.namaKategori }}
+                      </option>
+                    @endeach
+                  </select>
+                </div>
+                <div class="col-12 mb-3">
+                  <label for="deskripsi" class="form-label">Deskripsi</label>
+                  <textarea name="deskripsi" id="deskripsi" rows="4" class="form-control">{{ wisata.deskripsi }}</textarea>
+                </div>
+              </div>
+              <a href="{{ route('wisata.manage.index') }}" class="btn btn-secondary">Batal</a>
+              <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endslot
+@endcomponent

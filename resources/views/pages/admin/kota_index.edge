@@ -1,0 +1,68 @@
+@component('components/layouts/app', { title: 'Kelola Kota' })
+    @slot('main')
+    <div class="card shadow-sm">
+      <div class="card-header">
+        <h2 class="h5 mb-0 d-flex align-items-center"><i class="bi bi-buildings-fill me-2"></i> Kelola Kota</h2>
+      </div>
+      <div class="card-body">
+        <form action="{{ route('kota.store') }}" method="POST" class="row g-3 align-items-center justify-content-center mb-4 pb-3 border-bottom">
+          {{ csrfField() }}
+          <div class="col-sm-6">
+            <label for="namaKota" class="visually-hidden">Nama Kota</label>
+            <input 
+              type="text" 
+              id="namaKota"
+              name="namaKota"
+              class="form-control {{ flashMessages.has('errors.namaKota') ? 'is-invalid' : '' }}" 
+              placeholder="Masukkan nama kota baru"
+              value="{{ flashMessages.get('old.namaKota') || '' }}"
+            >
+            @if(flashMessages.has('errors.namaKota'))
+              <div class="invalid-feedback">{{ flashMessages.get('errors.namaKota') }}</div>
+            @endif
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-plus-lg"></i> Tambah
+            </button>
+          </div>
+        </form>
+        
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th scope="col" class="text-center" style="width: 5%;">#</th>
+                <th scope="col">Nama Kota</th>
+                <th scope="col" class="text-center" style="width: 20%;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              @each((kota, index) in kotas)
+                <tr>
+                  <td class="text-center">{{ index + 1 }}</td>
+                  <td>{{ kota.namaKota }}</td>
+                  <td class="text-center">
+                    <a href="{{ route('kota.edit', { id: kota.id }) }}" class="btn btn-sm btn-warning">
+                      <i class="bi bi-pencil-square"></i> Edit
+                    </a>
+                    <form action="{{ route('kota.destroy', { id: kota.id }) }}?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Anda yakin ingin menghapus kota ini?')">
+                        {{ csrfField() }}
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            <i class="bi bi-trash"></i> Hapus
+                        </button>
+                    </form>
+                  </td>
+                </tr>
+              @else
+                <tr>
+                  <td colspan="3" class="text-center text-muted p-4">Belum ada data kota.</td>
+                </tr>
+              @endeach
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  @endslot
+@endcomponent

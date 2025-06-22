@@ -1,0 +1,41 @@
+@component('components/layouts/app', { title: 'Dashboard' })
+  @slot('main')
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="h3 mb-0 text-gray-800">📊 Dashboard Aplikasi Wisata</h1>
+    </div>
+
+    <p class="lead text-muted mb-4">
+      Selamat datang, {{ auth.user.fullName }}! Kelola data destinasi wisata dengan mudah menggunakan menu di bawah ini.
+    </p>
+
+    <div class="row">
+      <div class="col-sm-6 col-lg-4 mb-4">
+        <div class="card h-100 shadow-sm border-primary">
+          <div class="card-body text-center">
+            <h5 class="card-title text-primary">📁 Kelola Kategori</h5>
+            <p class="card-text">Tambah, edit, dan hapus kategori wisata.</p>
+            <a href="{{ route('kategori.index') }}" class="btn btn-primary mt-2">Kelola</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4 mb-4">
+        <div class="card h-100 shadow-sm border-warning">
+          <div class="card-body text-center">
+            <h5 class="card-title text-warning">🏙️ Kelola Kota</h5>
+            <p class="card-text">Tambah, edit, dan hapus daftar kota tujuan wisata.</p>
+            <a href="{{ route('kota.index') }}" class="btn btn-warning mt-2">Kelola</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-4 mb-4">
+        <div class="card h-100 shadow-sm border-success">
+          <div class="card-body text-center">
+            <h5 class="card-title text-success">🗺️ Kelola Destinasi</h5>
+            <p class="card-text">Tambah, edit, dan hapus destinasi wisata.</p>
+            <a href="{{ route('wisata.manage.index') }}" class="btn btn-success mt-2">Kelola</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endslot
+@endcomponent

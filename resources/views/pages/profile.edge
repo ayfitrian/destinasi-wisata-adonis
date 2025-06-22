@@ -1,0 +1,35 @@
+@component('components/layouts/app', { title: 'Profil Saya' })
+  @slot('main')
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow-sm">
+          <div class="card-header">
+            <h4 class="mb-0">Informasi Profil</h4>
+          </div>
+          <div class="card-body">
+            <form action="{{ route('profile.update') }}" method="POST">
+              {{ csrfField() }}
+              <input type="hidden" name="_method" value="PUT">
+              
+              <div class="mb-3">
+                <label for="fullName" class="form-label">Nama Lengkap</label>
+                <input type="text" id="fullName" name="fullName" class="form-control {{ flashMessages.has('errors.fullName') ? 'is-invalid' : '' }}" value="{{ auth.user.fullName }}">
+                @if(flashMessages.has('errors.fullName'))
+                  <div class="invalid-feedback">{{ flashMessages.get('errors.fullName') }}</div>
+                @endif
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" name="email" class="form-control {{ flashMessages.has('errors.email') ? 'is-invalid' : '' }}" value="{{ auth.user.email }}">
+                @if(flashMessages.has('errors.email'))
+                  <div class="invalid-feedback">{{ flashMessages.get('errors.email') }}</div>
+                @endif
+              </div>
+              <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endslot
+@endcomponent

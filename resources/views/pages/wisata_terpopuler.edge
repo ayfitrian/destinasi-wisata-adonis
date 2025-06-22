@@ -1,0 +1,23 @@
+@component('components/layouts/app', { title: 'Wisata Terpopuler' })
+  @slot('main')
+    <h2 class="display-6 fw-bold mb-4 text-center">🏆 Destinasi Terpopuler</h2>
+    <p class="text-center text-muted mb-5">Berdasarkan rating tertinggi dari para pengunjung.</p>
+    
+    <div class="list-group">
+      @each(wisata in wisatas)
+        <a href="{{ route('wisata.detail', {id: wisata.id}) }}" class="list-group-item list-group-item-action flex-column align-items-start mb-3 shadow-sm rounded-3">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1 fw-bold text-primary">{{ wisata.nama }}</h5>
+            <span class="badge bg-warning text-dark p-2">⭐ {{ Number(wisata.$extras.avg_rating).toFixed(1) }} / 5</span>
+          </div>
+          <p class="mb-1 text-muted">{{ wisata.deskripsi.substring(0, 150) }}...</p>
+          <small>📍 {{ wisata.kota.namaKota }} | 📁 {{ wisata.kategori.namaKategori }}</small>
+        </a>
+      @else
+        <div class="alert alert-info text-center">
+            <p class="mb-0">Belum ada wisata yang memiliki ulasan.</p>
+          </div>
+      @endeach
+    </div>
+  @endslot
+@endcomponent

@@ -1,0 +1,50 @@
+@component('components/layouts/app', { title: 'Kelola Ulasan' })
+  @slot('main')
+    <div class="card shadow-sm">
+      <div class="card-header">
+        <h2 class="h5 mb-0 d-flex align-items-center"><i class="bi bi-chat-square-text-fill me-2"></i> Kelola Ulasan Pengunjung</h2>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th style="width: 5%;">#</th>
+                <th>Nama Wisata</th>
+                <th>Pengguna</th>
+                <th class="text-center">Rating</th>
+                <th>Komentar</th>
+                <th>Tanggal</th>
+                <th class="text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              @each((ulasan, index) in ulasans)
+                <tr>
+                  <td class="text-center">{{ index + 1 }}</td>
+                  <td><a href="{{ route('wisata.detail', { id: ulasan.wisata.id }) }}">{{ ulasan.wisata.nama }}</a></td>
+                  <td>{{ ulasan.user.fullName }}</td>
+                  <td class="text-center"><span class="badge bg-warning text-dark">⭐ {{ ulasan.rating }}</span></td>
+                  <td>{{ ulasan.komentar || '-' }}</td>
+                  <td><small>{{ ulasan.createdAt.toFormat('dd LLL yyyy') }}</small></td>
+                  <td class="text-center">
+                    <form action="{{ route('ulasan.destroy', { id: ulasan.id }) }}?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Anda yakin ingin menghapus ulasan ini?')">
+                        {{ csrfField() }}
+                        <button type="submit" class="btn btn-sm btn-danger" title="Hapus Ulasan">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                  </td>
+                </tr>
+              @else
+                <tr>
+                  <td colspan="7" class="text-center text-muted p-4">Belum ada ulasan dari pengunjung.</td>
+                </tr>
+              @endeach
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  @endslot
+@endcomponent

@@ -1,0 +1,45 @@
+@component('components/layouts/guest', { title: 'Register' })
+  @slot('main')
+    <div class="card shadow-lg border-0" style="width: 25rem;">
+      <div class="card-header bg-success text-white text-center">
+        <h3 class="mb-0">Buat Akun Baru</h3>
+      </div>
+      <div class="card-body p-4">
+        <form action="{{ route('auth.register') }}" method="POST">
+          {{ csrfField() }}
+          <div class="mb-3">
+            <label for="fullName" class="form-label">Nama Lengkap</label>
+            <input type="text" class="form-control {{ flashMessages.has('errors.fullName') ? 'is-invalid' : '' }}" id="fullName" name="fullName" value="{{ flashMessages.get('fullName') || '' }}" required>
+            @if(flashMessages.has('errors.fullName'))
+              <div class="invalid-feedback">{{ flashMessages.get('errors.fullName') }}</div>
+            @endif
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Alamat Email</label>
+            <input type="email" class="form-control {{ flashMessages.has('errors.email') ? 'is-invalid' : '' }}" id="email" name="email" value="{{ flashMessages.get('email') || '' }}" required>
+            @if(flashMessages.has('errors.email'))
+              <div class="invalid-feedback">{{ flashMessages.get('errors.email') }}</div>
+            @endif
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control {{ flashMessages.has('errors.password') ? 'is-invalid' : '' }}" id="password" name="password" required>
+            @if(flashMessages.has('errors.password'))
+              <div class="invalid-feedback">{{ flashMessages.get('errors.password') }}</div>
+            @endif
+          </div>
+          <div class="mb-3">
+            <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
+            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-success">Register</button>
+          </div>
+        </form>
+        <div class="text-center mt-3">
+          <small>Sudah punya akun? <a href="{{ route('auth.showLogin') }}">Login</a></small>
+        </div>
+      </div>
+    </div>
+  @endslot
+@endcomponent

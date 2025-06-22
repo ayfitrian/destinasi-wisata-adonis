@@ -1,0 +1,83 @@
+@component('components/layouts/app', { title: wisata.nama })
+  @slot('main')
+    <div class="bg-white p-4 p-md-5 rounded-3 shadow-sm">
+      <div class="text-center mb-4">
+        <h1 class="display-4 fw-bold">{{ wisata.nama }}</h1>
+        <p class="lead text-muted">{{ wisata.deskripsi }}</p>
+      </div>
+      
+      <div class="row text-center g-3 mb-4">
+        <div class="col-md-4">
+          <div class="p-3 bg-light rounded-3">
+            <h6 class="text-muted">🏙️ Kota</h6>
+            <p class="h5 mb-0">{{ wisata.kota.namaKota }}</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="p-3 bg-light rounded-3">
+            <h6 class="text-muted">📁 Kategori</h6>
+            <p class="h5 mb-0">{{ wisata.kategori.namaKategori }}</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="p-3 bg-light rounded-3">
+            <h6 class="text-muted">💰 Biaya Masuk</h6>
+            <p class="h5 mb-0">Rp {{ new Intl.NumberFormat('id-ID').format(wisata.biayaMasuk) }}</p>
+          </div>
+        </div>
+      </div>
+      
+      <hr class="my-5">
+      
+      <div class="row">
+        <div class="col-lg-7">
+          <h3 class="mb-4">💬 Ulasan Pengunjung</h3>
+          @if(wisata.ulasans.length > 0)
+            @each(ulasan in wisata.ulasans)
+              <div class="card mb-3">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <h5 class="card-title">{{ ulasan.user.fullName }}</h5>
+                    <span class="badge bg-warning text-dark">⭐ {{ ulasan.rating }}/5</span>
+                  </div>
+                  <p class="card-text">{{ ulasan.komentar }}</p>
+                  <small class="text-muted">{{ ulasan.createdAt.toFormat('dd LLLL yyyy, HH:mm') }}</small>
+                </div>
+              </div>
+            @endeach
+          @else
+            <p class="text-muted">Belum ada ulasan untuk destinasi ini.</p>
+          @endif
+        </div>
+        <div class="col-lg-5">
+          <div class="card bg-light border-0 sticky-top" style="top: 100px;">
+            <div class="card-body">
+              <h3 class="mb-4 text-center">📝 Tulis Ulasan Anda</h3>
+              @if(auth.user)
+                <form action="{{ route('ulasan.store', { id: wisata.id }) }}" method="POST">
+                  {{ csrfField() }}
+                  <div class="mb-3">
+                    <label for="rating" class="form-label">Rating (1-5)</label>
+                    <input type="number" id="rating" name="rating" class="form-control" min="1" max="5" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="komentar" class="form-label">Komentar</label>
+                    <textarea id="komentar" name="komentar" rows="4" class="form-control"></textarea>
+                  </div>
+                  <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">🚀 Kirim Ulasan</button>
+                  </div>
+                </form>
+              @else
+                <div class="text-center">
+                  <p>Anda harus login untuk dapat memberikan ulasan.</p>
+                  <a href="{{ route('auth.showLogin') }}" class="btn btn-primary">Login untuk Menulis Ulasan</a>
+                </div>
+              @endif
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endslot
+@endcomponent

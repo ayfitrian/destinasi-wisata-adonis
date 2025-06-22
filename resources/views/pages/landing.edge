@@ -1,0 +1,24 @@
+@component('components/layouts/guest', { title: 'Selamat Datang!' })
+  @slot('main')
+    <div class="card shadow-lg border-0 rounded-4" style="max-width: 800px;">
+      <div class="card-body p-5">
+        <div class="row align-items-center">
+          <div class="col-md-6 text-center text-md-start">
+            <h1 class="display-5 fw-bold text-primary">🌴 Selamat Datang!</h1>
+            <p class="lead text-muted">Jelajahi berbagai destinasi wisata terbaik di Indonesia dan bagikan ulasanmu!</p>
+          </div>
+          <div class="col-md-6">
+            <div class="card bg-light border-0 p-4 rounded-3">
+              <h2 class="h4 fw-bold text-center mb-3">🔐 Akses Akun Anda</h2>
+              <p class="text-center text-muted mb-4">Pilih salah satu opsi di bawah:</p>
+              <div class="d-grid gap-3">
+                <a href="{{ route('auth.showLogin') }}" class="btn btn-primary btn-lg">Login 🔑</a>
+                <a href="{{ route('auth.showRegister') }}" class="btn btn-success btn-lg">Register 📝</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  @endslot
+@endcomponent
